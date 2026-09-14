@@ -1,13 +1,13 @@
 {
   "name": "AFK Bot",
   "bot-account": {
-    "username": "Entity303",
+    "username": "Unknown",
     "password": "",
     "type": "offline"
   },
   "server": {
-    "ip": "paras_bhosadi.aternos.me",
-    "port": 62521,
+    "ip": "Ananta134.aternos.me",
+    "port": 17750,
     "version": "1.20.1",
     "try-creative": false
   },
