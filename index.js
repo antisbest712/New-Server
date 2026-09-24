@@ -76,7 +76,6 @@ function createBot() {
     } else {
       // Return back home on random death shifts
       setTimeout(() => {
-        bot.chat("Returning to my base coordinates! 🏃‍♂️");
         const movements = new Movements(bot);
         bot.pathfinder.setMovements(movements);
         bot.pathfinder.setGoal(new GoalBlock(homePosition.x, homePosition.y, homePosition.z));
