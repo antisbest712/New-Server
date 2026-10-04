@@ -5,7 +5,7 @@ const { Movements, pathfinder, goals } = require("mineflayer-pathfinder");
 const { GoalBlock } = goals;
 const config = require("./settings.json");
 const express = require("express");
-const fetch = require("node-fetch"); // Required for AI web search
+const fetch = require("node-fetch"); // Required for AI processing
 
 // ============================================================
 // EXPRESS SERVER - Live Monitoring Interface
@@ -200,7 +200,7 @@ function createBot() {
     const lowerMessage = message.toLowerCase();
 
     // ============================================================
-    // FIXED CORE FEATURE: AI INTERNET SEARCH
+    // FIXED CORE FEATURE: FREE SMART AI CONVERSATION
     // ============================================================
     if (message.startsWith('!ask ')) {
       const question = message.slice(5).trim();
@@ -210,33 +210,28 @@ function createBot() {
       }
 
       try {
-        // Querying DuckDuckGo Instant Answer API using flawless string interpolation backticks
-        const url = `https://duckduckgo.com{encodeURIComponent(question)}&format=json&no_html=1`;
+        // Querying a powerful conversational chatbot API using flawless backtick formatting
+        const url = `https://popcat.xyz{encodeURIComponent(question)}`;
         const res = await fetch(url);
         const data = await res.json();
 
-        let answer = data.AbstractText || data.Definition;
-
-        // Smart fallback logic if an abstract answer is not found
-        if (!answer && data.RelatedTopics && data.RelatedTopics.length > 0) {
-          answer = data.RelatedTopics[0].Text || data.RelatedTopics.Text;
-        }
+        let answer = data.response;
 
         if (!answer) {
           answer = "Mujhe iska direct answer nahi mila. Kuch aur poochiye!";
         }
 
-        // Minecraft chat formatting and character limitations (Max 256 characters)
+        // Trim answers to perfectly fit within Minecraft's 256 character restriction
         if (answer.length > 250) {
           answer = answer.substring(0, 247) + "...";
         }
 
         bot.chat(answer);
       } catch (err) {
-        console.error("AI Search Error: ", err);
-        bot.chat("Internet par check karte waqt kuch error aaya!");
+        console.error("AI Processing Error: ", err);
+        bot.chat("Mere dimaag me temporary connection error aaya!");
       }
-      return; // Stop executing standard command strings if this was an AI query
+      return; // Stop execution of standard commands for AI queries
     }
 
     // ============================================================
