@@ -210,8 +210,10 @@ function createBot() {
       }
 
       try {
-        // Querying a powerful conversational chatbot API using flawless backtick formatting
-        const url = `https://popcat.xyz{encodeURIComponent(question)}`;
+        // Safe URL creation using basic concatenation instead of template literals
+        const cleanQuestion = encodeURIComponent(question);
+        const url = "https://popcat.xyz" + cleanQuestion;
+        
         const res = await fetch(url);
         const data = await res.json();
 
@@ -221,7 +223,7 @@ function createBot() {
           answer = "Mujhe iska direct answer nahi mila. Kuch aur poochiye!";
         }
 
-        // Trim answers to perfectly fit within Minecraft's 256 character restriction
+        // Trim responses to fit perfectly inside Minecraft's character restrictions
         if (answer.length > 250) {
           answer = answer.substring(0, 247) + "...";
         }
@@ -231,7 +233,7 @@ function createBot() {
         console.error("AI Processing Error: ", err);
         bot.chat("Mere dimaag me temporary connection error aaya!");
       }
-      return; // Stop execution of standard commands for AI queries
+      return; // Stop standard execution paths if an AI question was caught
     }
 
     // ============================================================
