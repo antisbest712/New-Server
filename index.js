@@ -209,19 +209,18 @@ function createBot() {
       }
 
       try {
-        // Safe object-based parameter generation
-        const params = new URLSearchParams();
-        params.append("message", question);
-        params.append("bot_name", "AntBot");
-        params.append("user_id", username);
-
-        // Safe engine construction 
-        const finalUrl = "https://affiliateplus.xyz?" + params.toString();
+        // Safe Google core structure layout
+        const finalUrl = "https://googleapis.com" + encodeURIComponent(question);
         
         const res = await fetch(finalUrl);
         const data = await res.json();
 
-        let answer = data.message || data.response || data.reply;
+        let answer = "";
+        if (data && data[0]) {
+          for (const sentence of data[0]) {
+            if (sentence[0]) answer += sentence[0];
+          }
+        }
 
         if (!answer) {
           answer = "Mujhe iska direct answer nahi mila. Kuch aur poochiye!";
@@ -236,7 +235,7 @@ function createBot() {
         console.error("AI Processing Error: ", err);
         bot.chat("Mere dimaag me temporary connection error aaya!");
       }
-      return; // Stop standard execution paths if an AI question was caught
+      return; 
     }
 
     // ============================================================
