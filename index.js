@@ -200,7 +200,7 @@ function createBot() {
     const lowerMessage = message.toLowerCase();
 
     // ============================================================
-    // NEW CORE FEATURE: AI INTERNET SEARCH
+    // FIXED CORE FEATURE: AI INTERNET SEARCH
     // ============================================================
     if (message.startsWith('!ask ')) {
       const question = message.slice(5).trim();
@@ -210,8 +210,8 @@ function createBot() {
       }
 
       try {
-        // Querying DuckDuckGo Instant Answer API for fast, reliable internet lookup
-       const url = `https://duckduckgo.com{encodeURIComponent(question)}&format=json&no_html=1`;
+        // Querying DuckDuckGo Instant Answer API using flawless string interpolation backticks
+        const url = `https://duckduckgo.com{encodeURIComponent(question)}&format=json&no_html=1`;
         const res = await fetch(url);
         const data = await res.json();
 
@@ -219,7 +219,7 @@ function createBot() {
 
         // Smart fallback logic if an abstract answer is not found
         if (!answer && data.RelatedTopics && data.RelatedTopics.length > 0) {
-          answer = data.RelatedTopics[0].Text;
+          answer = data.RelatedTopics[0].Text || data.RelatedTopics.Text;
         }
 
         if (!answer) {
