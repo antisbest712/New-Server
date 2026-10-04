@@ -210,11 +210,14 @@ function createBot() {
       }
 
       try {
-        // Safe URL creation using basic concatenation instead of template literals
+        // Encode the question to protect spaces and special characters
         const cleanQuestion = encodeURIComponent(question);
-        const url = "https://popcat.xyz" + cleanQuestion;
         
-        const res = await fetch(url);
+        // Fully explicit, static API string builder
+        const baseUrl = "https://popcat.xyz";
+        const finalUrl = baseUrl + "?msg=" + cleanQuestion;
+        
+        const res = await fetch(finalUrl);
         const data = await res.json();
 
         let answer = data.response;
@@ -223,7 +226,7 @@ function createBot() {
           answer = "Mujhe iska direct answer nahi mila. Kuch aur poochiye!";
         }
 
-        // Trim responses to fit perfectly inside Minecraft's character restrictions
+        // Trim answers to perfectly fit within Minecraft's 256 character restriction
         if (answer.length > 250) {
           answer = answer.substring(0, 247) + "...";
         }
