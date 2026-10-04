@@ -213,7 +213,7 @@ function createBot() {
         // Encode the question to protect spaces and special characters
         const cleanQuestion = encodeURIComponent(question);
         
-        // Fully explicit, static API string builder
+        // Fully explicit, static API string builder targeting api.popcat.xyz
         const baseUrl = "https://popcat.xyz";
         const finalUrl = baseUrl + "?msg=" + cleanQuestion;
         
