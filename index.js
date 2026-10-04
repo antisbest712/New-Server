@@ -107,7 +107,6 @@ function createBot() {
 
   // INSTANT WELCOME MESSAGE ON PLAYER JOIN
   bot.on('playerJoined', (player) => {
-    // Make sure the bot doesn't welcome itself
     if (player.username === bot.username) return;
     bot.chat("Hi " + player.username + ", Make sure to subscribe to antgamer6969!");
   });
@@ -200,7 +199,7 @@ function createBot() {
     const lowerMessage = message.toLowerCase();
 
     // ============================================================
-    // FIXED CORE FEATURE: FREE SMART AI CONVERSATION
+    // FIXED CORE FEATURE: ULTRA-STABLE SMART CHAT AI
     // ============================================================
     if (message.startsWith('!ask ')) {
       const question = message.slice(5).trim();
@@ -210,23 +209,21 @@ function createBot() {
       }
 
       try {
-        // Encode the question to protect spaces and special characters
         const cleanQuestion = encodeURIComponent(question);
         
-        // Fully explicit, static API string builder targeting api.popcat.xyz
-        const baseUrl = "https://popcat.xyz";
-        const finalUrl = baseUrl + "?msg=" + cleanQuestion;
+        // Switched to a robust backup API that does not share domain roots with popcat website paths
+        const finalUrl = "https://affiliateplus.xyz" + cleanQuestion + "&bot_name=AntBot&user_id=" + encodeURIComponent(username);
         
         const res = await fetch(finalUrl);
         const data = await res.json();
 
-        let answer = data.response;
+        // Target standard response fields safely
+        let answer = data.message || data.response || data.reply;
 
         if (!answer) {
           answer = "Mujhe iska direct answer nahi mila. Kuch aur poochiye!";
         }
 
-        // Trim answers to perfectly fit within Minecraft's 256 character restriction
         if (answer.length > 250) {
           answer = answer.substring(0, 247) + "...";
         }
@@ -236,7 +233,7 @@ function createBot() {
         console.error("AI Processing Error: ", err);
         bot.chat("Mere dimaag me temporary connection error aaya!");
       }
-      return; // Stop standard execution paths if an AI question was caught
+      return; 
     }
 
     // ============================================================
