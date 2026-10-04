@@ -211,7 +211,7 @@ function createBot() {
 
       try {
         // Querying DuckDuckGo Instant Answer API for fast, reliable internet lookup
-        const url = `https://duckduckgo.com{encodeURIComponent(question)}&format=json&no_html=1`;
+       const url = `https://duckduckgo.com{encodeURIComponent(question)}&format=json&no_html=1`;
         const res = await fetch(url);
         const data = await res.json();
 
