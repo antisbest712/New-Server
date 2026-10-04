@@ -209,12 +209,14 @@ function createBot() {
       }
 
       try {
-        // Construct the URL step-by-step using separate clean strings
-        const encodedQuestion = encodeURIComponent(question);
-        const encodedUser = encodeURIComponent(username);
-        
-        // Solid string layout prevents concatenation layout corruption errors
-        const finalUrl = "https://affiliateplus.xyz" + encodedQuestion + "&bot_name=AntBot&user_id=" + encodedUser;
+        // Safe object-based parameter generation
+        const params = new URLSearchParams();
+        params.append("message", question);
+        params.append("bot_name", "AntBot");
+        params.append("user_id", username);
+
+        // Safe engine construction 
+        const finalUrl = "https://affiliateplus.xyz?" + params.toString();
         
         const res = await fetch(finalUrl);
         const data = await res.json();
