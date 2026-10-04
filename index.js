@@ -5,7 +5,6 @@ const { Movements, pathfinder, goals } = require("mineflayer-pathfinder");
 const { GoalBlock } = goals;
 const config = require("./settings.json");
 const express = require("express");
-const fetch = require("node-fetch"); // Required for AI processing
 
 // ============================================================
 // EXPRESS SERVER - Live Monitoring Interface
@@ -75,7 +74,6 @@ function createBot() {
       homePosition = bot.entity.position.clone();
       console.log("Home position locked.");
     } else {
-      // Return back home on random death shifts
       setTimeout(() => {
         const movements = new Movements(bot);
         bot.pathfinder.setMovements(movements);
@@ -136,7 +134,6 @@ function createBot() {
     }
   });
 
-  // Main combat check loops
   function startCombatLoop() {
     if (pvpLoopInterval) clearInterval(pvpLoopInterval);
 
@@ -199,42 +196,33 @@ function createBot() {
     const lowerMessage = message.toLowerCase();
 
     // ============================================================
-    // FIXED CORE FEATURE: ULTRA-STABLE SMART CHAT AI
+    // CRASH-PROOF CORE FEATURE: LOCAL BRAIN DICTIONARY
     // ============================================================
     if (message.startsWith('!ask ')) {
-      const question = message.slice(5).trim();
+      const question = message.slice(5).trim().toLowerCase();
       if (!question) {
         bot.chat("Poocho kya poochna hai? Type: !ask [question]");
         return;
       }
 
-      try {
-        // Safe Google core structure layout
-        const finalUrl = "https://googleapis.com" + encodeURIComponent(question);
-        
-        const res = await fetch(finalUrl);
-        const data = await res.json();
+      // Offline dictionary parameters - No web API requested, physically cannot throw URL errors!
+      let answer = "Mujhe iska direct answer abhi nahi pata. Mere standard database me check kijiye!";
 
-        let answer = "";
-        if (data && data[0]) {
-          for (const sentence of data[0]) {
-            if (sentence[0]) answer += sentence[0];
-          }
-        }
-
-        if (!answer) {
-          answer = "Mujhe iska direct answer nahi mila. Kuch aur poochiye!";
-        }
-
-        if (answer.length > 250) {
-          answer = answer.substring(0, 247) + "...";
-        }
-
-        bot.chat(answer);
-      } catch (err) {
-        console.error("AI Processing Error: ", err);
-        bot.chat("Mere dimaag me temporary connection error aaya!");
+      if (question.includes("mythpat")) {
+        answer = "Mythpat's real name is Mithilesh Patankar!";
+      } else if (question.includes("bixu")) {
+        answer = "Bixu's real name is Bikram Bhushal!";
+      } else if (question.includes("hello") || question.includes("hi")) {
+        answer = "Hello there! Main antgamer6969 ka AI assistant hoon. Sabse pehle jaakar channel ko subscribe karo!";
+      } else if (question.includes("2+2") || question.includes("2 + 2")) {
+        answer = "2 + 2 is equal to 4!";
+      } else if (question.includes("5+5") || question.includes("5 + 5")) {
+        answer = "5 + 5 is equal to 10!";
+      } else if (question.includes("creator") || question.includes("owner")) {
+        answer = "Mera creator antgamer6969 hai! Make sure to subscribe to his channel.";
       }
+
+      bot.chat(answer);
       return; 
     }
 
