@@ -5,6 +5,7 @@ const { Movements, pathfinder, goals } = require("mineflayer-pathfinder");
 const { GoalBlock } = goals;
 const config = require("./settings.json");
 const express = require("express");
+const fetch = require("node-fetch"); // Required for AI web search
 
 // ============================================================
 // EXPRESS SERVER - Live Monitoring Interface
@@ -198,6 +199,49 @@ function createBot() {
     if (username === bot.username) return;
     const lowerMessage = message.toLowerCase();
 
+    // ============================================================
+    // NEW CORE FEATURE: AI INTERNET SEARCH
+    // ============================================================
+    if (message.startsWith('!ask ')) {
+      const question = message.slice(5).trim();
+      if (!question) {
+        bot.chat("Poocho kya poochna hai? Type: !ask [question]");
+        return;
+      }
+
+      try {
+        // Querying DuckDuckGo Instant Answer API for fast, reliable internet lookup
+        const url = `https://duckduckgo.com{encodeURIComponent(question)}&format=json&no_html=1`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        let answer = data.AbstractText || data.Definition;
+
+        // Smart fallback logic if an abstract answer is not found
+        if (!answer && data.RelatedTopics && data.RelatedTopics.length > 0) {
+          answer = data.RelatedTopics[0].Text;
+        }
+
+        if (!answer) {
+          answer = "Mujhe iska direct answer nahi mila. Kuch aur poochiye!";
+        }
+
+        // Minecraft chat formatting and character limitations (Max 256 characters)
+        if (answer.length > 250) {
+          answer = answer.substring(0, 247) + "...";
+        }
+
+        bot.chat(answer);
+      } catch (err) {
+        console.error("AI Search Error: ", err);
+        bot.chat("Internet par check karte waqt kuch error aaya!");
+      }
+      return; // Stop executing standard command strings if this was an AI query
+    }
+
+    // ============================================================
+    // STANDARD COMMANDS
+    // ============================================================
     if (lowerMessage === 'hi') {
       bot.chat("Hello, " + username + "! Make sure to subscribe to antgamer6969!");
     }
