@@ -209,15 +209,16 @@ function createBot() {
       }
 
       try {
-        const cleanQuestion = encodeURIComponent(question);
+        // Construct the URL step-by-step using separate clean strings
+        const encodedQuestion = encodeURIComponent(question);
+        const encodedUser = encodeURIComponent(username);
         
-        // Switched to a robust backup API that does not share domain roots with popcat website paths
-        const finalUrl = "https://affiliateplus.xyz" + cleanQuestion + "&bot_name=AntBot&user_id=" + encodeURIComponent(username);
+        // Solid string layout prevents concatenation layout corruption errors
+        const finalUrl = "https://affiliateplus.xyz" + encodedQuestion + "&bot_name=AntBot&user_id=" + encodedUser;
         
         const res = await fetch(finalUrl);
         const data = await res.json();
 
-        // Target standard response fields safely
         let answer = data.message || data.response || data.reply;
 
         if (!answer) {
@@ -233,7 +234,7 @@ function createBot() {
         console.error("AI Processing Error: ", err);
         bot.chat("Mere dimaag me temporary connection error aaya!");
       }
-      return; 
+      return; // Stop standard execution paths if an AI question was caught
     }
 
     // ============================================================
